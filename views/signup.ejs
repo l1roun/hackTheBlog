@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        #signup-form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            padding: 20px;
+            width: 100%;
+        }
+        
+        #signup-form label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        #signup-form input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        #signup-button {
+            background-color: rgb(220, 204, 252);
+            border: none;
+            color: #fff;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        #signup-button:hover {
+            background-color: rgb(190, 174, 232);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="signup-form">
+        <h2 style="text-align: center;">Signup</h2>
+        <form action="/signup" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <button type="submit" id="signup-button">Signup</button>
+        </form>
+    </div>
+</body>
+
+</html>

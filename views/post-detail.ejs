@@ -1,0 +1,132 @@
+<!-- views/details-post.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('includes/head', { title: post.title }) %>
+        <link rel="stylesheet" href="/styles/posts.css">
+</head>
+
+<body>
+    <%- include('includes/header') %>
+        <main id="post-detail">
+            <h1>
+                <%= post.title %>
+            </h1>
+            <section id="post-meta">
+                <address><a href="mailto:<%= post.author_email %>"><%= post.author_name %></a></address> |
+                <time datetime="<%= post.date %>"><%= post.humanReadableDate %></time>
+            </section>
+            <hr>
+            <section>
+                <p id="body">
+                    <%= post.body %>
+                </p>
+            </section>
+        </main>
+
+        <!-- Display like/unlike buttons and likes count -->
+        <section id="post-likes">
+            <p>Likes:
+                <%= post.likesCount %>
+            </p>
+
+            <% if (post.userLiked) { %>
+                <form action="/unlike/<%= post.id %>" method="post">
+                    <button type="submit">Unlike</button>
+                </form>
+                <% } else { %>
+                    <form action="/like/<%= post.id %>" method="post">
+                        <button type="submit">Like</button>
+                    </form>
+                    <% } %>
+        </section>
+
+        <h2>Comments</h2>
+        <ul>
+            <% for (const comment of comments) { %>
+                <div class="comment">
+                    <p>
+                        <h4>
+                            <%= comment.author_name %>
+                        </h4>
+                        <%= comment.content %>
+                    </p>
+
+                    <% if (currentUser === 1 || currentUser === comment.author_id) { %>
+                        <!-- Display edit and delete buttons for authorized users -->
+                        <button onclick="openEditForm('<%= comment.id %>', '<%= comment.text %>')">Edit</button>
+
+                        <!-- Add a hidden form for editing -->
+                        <form id="editForm" style="display:none;" action="/edit-comment/<%= post.id %>/<%= comment.id %>" method="post">
+                            <input type="hidden" id="editCommentId" name="commentId" value="">
+                            <label for="editText">Edit Comment:</label>
+                            <textarea id="editText" name="newText" required></textarea>
+                            <button type="submit">Submit Edit</button>
+                        </form>
+                        <button onclick="deleteComment('<%= comment.id %>')">Delete</button>
+                        <% } %>
+                </div>
+                <% } %>
+        </ul>
+
+        <form action="/posts/<%= post.id %>/comments" method="post">
+            <label for="commentContent">Add a Comment:</label>
+            <textarea id="commentContent" name="content" rows="4" required></textarea>
+            <button type="submit">Submit Comment</button>
+        </form>
+
+        <script>
+            // Your existing JavaScript code
+
+            // Function to open the edit form with the current comment text
+            function openEditForm(commentId, currentText) {
+                const editForm = document.getElementById('editForm');
+                const editText = document.getElementById('editText');
+
+                // If the form is currently visible and associated with the clicked comment, hide it
+                if (editForm.style.display === 'block' && window.currentCommentId === commentId) {
+                    editForm.style.display = 'none';
+                    window.currentCommentId = null; // Reset the stored comment ID
+                } else {
+                    // Show the form and populate the text
+                    editText.value = currentText;
+                    editForm.style.display = 'block';
+
+                    // Store the comment ID in a variable accessible to submitEditForm
+                    window.currentCommentId = commentId;
+                    console.log(window.currentCommentId);
+                }
+            }
+
+            function deleteComment(commentId) {
+                // Implement logic to allow deleting a comment
+                console.log('Deleting comment with ID:', commentId);
+
+                // Make an AJAX request to the server to delete the comment
+                // For example, using fetch or XMLHttpRequest
+                fetch(`/delete-comment/${commentId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Comment deleted successfully, update the UI as needed
+                            console.log('Comment deleted successfully');
+                            location.reload();
+                        } else {
+                            // Handle error
+                            console.error('Failed to delete comment');
+                            location.reload();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error during delete comment request:', error);
+                    });
+            }
+        </script>
+</body>
+
+</html>

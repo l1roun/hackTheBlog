@@ -1,0 +1,28 @@
+<!-- views/includes/header.ejs -->
+<header id="main-header">
+    <div id="logo">
+        <a href="/">MyBlog</a>
+    </div>
+    <nav>
+        <ul>
+            <% if (currentUser) { %>
+                <!-- User is logged in, display "Logout" and "My Profile" links -->
+                <li>
+                    <a href="/profile">My Profile</a>
+                </li>
+                <li>
+                    <a href="/logout">Logout</a>
+                </li>
+                <li>
+                    <a href="/new-post">Create Post</a>
+                </li>
+                <% } else { %>
+                    <!-- User is not logged in, display "Login" and "Create Post" links -->
+                    <li>
+                        <a href="/login">Login</a>
+                    </li>
+
+                    <% } %>
+        </ul>
+    </nav>
+</header>
